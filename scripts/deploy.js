@@ -1,9 +1,6 @@
 const {
   etherBalanceString: etherBalanceStr,
   deployContract,
-  toWei,
-  log,
-  logString,
   logGas,
   verifyContract,
 } = require("../utils/utils.js");
@@ -16,18 +13,13 @@ async function main() {
   console.log(`Deploying contracts with the account: ${owner.address}`);
   console.log(`Owner balance: ${await etherBalanceStr(owner.address)}`);
 
-  const args = [
-    "testing new created token",
-    "TCT",
-    toWei("6000000"),
-    owner.address,
-  ];
-  const testingContract = await deployContract(owner, "TestingContract", args);
-  const tx = testingContract.deployTransaction;
+  const args = [];
+  const contract = await deployContract(owner, "MerkleProofVerify", args);
+  const tx = contract.deployTransaction;
   await logGas(tx);
 
   if (chainId != 31337 && chainId != 1337) {
-    await verifyContract(testingContract.address, args, tx);
+    await verifyContract(contract.address, args, tx);
   }
 }
 
